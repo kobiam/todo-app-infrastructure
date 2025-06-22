@@ -25,6 +25,11 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
+      - name: Terraform Init
+        # run: terraform init -reconfigure
+        run: terraform init -backend-config="storage_account_name=yourstorageaccount" -backend-config="container_name=yourcontainer" -backend-config="key=yourstatefile.tfstate" -backend-config="resource_group_name=your-resource-group"
+        working-directory: infrastructure/aks-terraform
+
       - name: Terraform Force Unlock
         run: terraform force-unlock cb3e84e7-509d-7d87-5173-6603fe958352
         env:
@@ -33,11 +38,7 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         working-directory: infrastructure/aks-terraform
-
-      - name: Terraform Init
-        run: terraform init -reconfigure
-        working-directory: infrastructure/aks-terraform
-
+        
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
         working-directory: infrastructure/aks-terraform
