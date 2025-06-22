@@ -43,7 +43,7 @@ jobs:
         working-directory: infrastructure/aks-terraform
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -out=tfplan -lock-timeout=60s
         working-directory: infrastructure/aks-terraform
 
       - name: Terraform Apply
