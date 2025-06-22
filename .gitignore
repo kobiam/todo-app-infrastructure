@@ -230,3 +230,8 @@ coverage/
 # Misc
 .cache/
 .eslintcache
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
