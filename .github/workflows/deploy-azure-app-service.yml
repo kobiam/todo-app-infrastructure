@@ -42,8 +42,14 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         working-directory: infrastructure/aks-terraform
 
+      - name: Clean up lock files
+        run: rm -rf infrastructure/aks-terraform/.terraform
+
       - name: Terraform Plan
         run: terraform plan -out=tfplan -lock-timeout=60s
+          -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+          -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
+          -var="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
         working-directory: infrastructure/aks-terraform
 
       - name: Terraform Apply
