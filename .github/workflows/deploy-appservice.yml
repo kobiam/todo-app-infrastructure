@@ -1,0 +1,28 @@
+name: Deploy ARM Template to Azure
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy ARM Template
+        uses: azure/arm-deploy@v1
+        with:
+          resourceGroupName: 'todo-app'
+          template: './azure-deploy.json'
+          parameters: './azure-deploy.parameters.json'
+          deploymentName: 'github-deploy-appservice'
