@@ -23,7 +23,7 @@ resource "azurerm_linux_web_app" "main" {
   name                = "fastapi-webapp-demo"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
-  app_service_plan_id = azurerm_service_plan.main.id
+  service_plan_id = azurerm_service_plan.main.id
 
   site_config {
     application_stack {
