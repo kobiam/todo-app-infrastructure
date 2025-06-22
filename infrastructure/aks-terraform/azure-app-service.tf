@@ -15,13 +15,8 @@ resource "azurerm_service_plan" "main" {
   name                = "fastapi-service-plan"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
-  kind                = "Linux"
-  reserved            = true  # required for Linux
-
-  sku {
-    tier = "Basic"
-    size = "B1"
-  }
+  os_type             = "Linux"
+  sku_name            = "B1"
 }
 
 resource "azurerm_app_service" "main" {
