@@ -34,7 +34,7 @@ jobs:
         working-directory: infrastructure/aks-terraform
 
       - name: Terraform Force Unlock
-        run: terraform force-unlock -force a6e8d6a1-89d2-c24d-2aa1-3b1c9d40c661
+        run: terraform force-unlock -force 968d56d6-4e07-4075-c63f-60c8656704fa
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
