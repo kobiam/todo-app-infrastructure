@@ -2,44 +2,44 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "appServiceName": {
-      "type": "string"
-    },
     "appServicePlanName": {
       "type": "string"
     },
-    "location": {
-      "type": "string",
-      "defaultValue": "westeurope"
+    "webAppName": {
+      "type": "string"
     },
-    "sku": {
-      "type": "string",
-      "defaultValue": "F1"
+    "dockerImageName": {
+      "type": "string"
     }
   },
   "resources": [
     {
       "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2022-03-01",
+      "apiVersion": "2021-02-01",
       "name": "[parameters('appServicePlanName')]",
-      "location": "[parameters('location')]",
+      "location": "[resourceGroup().location]",
       "sku": {
-        "name": "[parameters('sku')]"
+        "name": "B1",
+        "tier": "Basic"
       },
       "properties": {
-        "reserved": false
+        "reserved": true
       }
     },
     {
       "type": "Microsoft.Web/sites",
-      "apiVersion": "2022-03-01",
-      "name": "[parameters('appServiceName')]",
-      "location": "[parameters('location')]",
+      "apiVersion": "2021-02-01",
+      "name": "[parameters('webAppName')]",
+      "location": "[resourceGroup().location]",
+      "kind": "app,linux",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
       ],
       "properties": {
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+        "siteConfig": {
+          "linuxFxVersion": "[concat('DOCKER|', parameters('docker pull todoappreg.azurecr.io/fastapi-backend:latest'))]"
+        }
       }
     }
   ]
