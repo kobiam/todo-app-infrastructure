@@ -29,8 +29,6 @@ resource "azurerm_app_service" "main" {
     linux_fx_version = "DOCKER|todoappreg.azurecr.io/fastapi-backend:latest"
 
     acr_use_managed_identity_credentials = true
-    acr_username                         = null  # required to be null if using managed identity
-    acr_password                         = null
   }
 
   identity {
