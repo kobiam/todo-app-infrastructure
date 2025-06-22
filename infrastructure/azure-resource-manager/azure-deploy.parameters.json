@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "appServiceName": {
-      "value": "my-app-service"
+      "value": "my-app-service2"
     },
     "appServicePlanName": {
       "value": "my-app-plan"
