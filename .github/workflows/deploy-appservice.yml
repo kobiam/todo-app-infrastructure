@@ -23,7 +23,6 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: 'todo-app'
-          template: './azure-deploy.json'
-          parameters: './azure-deploy.parameters.json'
+          template: './infrastructure/azure-resource-manager/azure-deploy.json'
+          parameters: './infrastructure/azure-resource-manager/azure-deploy.parameters.json'
           deploymentName: 'github-deploy-appservice'
-        working-directory: infrastructure/azure-resource-manager
