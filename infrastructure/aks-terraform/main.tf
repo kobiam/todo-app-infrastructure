@@ -7,6 +7,13 @@ terraform {
   }
 }
 
+provider "azurerm" {
+  features = {}
+
+  subscription_id = var.subscription_id
+  tenant_id       = var.tenant_id
+}
+
 output "app_url" {
   value = "https://${azurerm_linux_web_app.main.default_hostname}"
 }
