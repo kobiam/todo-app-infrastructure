@@ -1,9 +1,6 @@
 name: Deploy Azure Infra with Terraform
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -32,7 +29,8 @@ jobs:
           terraform_version: 1.12.2
 
       - name: Terraform Init
-        run: terraform init -reconfigure
+        # run: terraform init -reconfigure
+        run: terraform init -backend-config="storage_account_name=tfstateaccounttodoapp" -backend-config="container_name=tfstate" -backend-config="key=fastapi-app.tfstate" -backend-config="resource_group_name=todo-app"
         working-directory: infrastructure/aks-terraform
 
       - name: Terraform Force Unlock
@@ -42,6 +40,7 @@ jobs:
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        working-directory: infrastructure/aks-terraform
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
