@@ -1,9 +1,10 @@
 name: Deploy FastAPI Backend to Azure App Service
 
 on:
-  push:
-    branches:
-      - main
+    workflow_dispatch:
+    # push:
+    #     branches:
+    #     - main
 
 jobs:
   deploy:
