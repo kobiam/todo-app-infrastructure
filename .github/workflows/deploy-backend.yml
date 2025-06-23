@@ -37,7 +37,7 @@ jobs:
           az deployment group create \
             --resource-group todo-app \
             --template-file infrastructure/azure-resource-manager/azure-deploy.json \
-            --parameters webAppName=fastapi-backend-app \
+            --parameters webAppName=fastapi-backend-app-2 \
                          serverFarmName=fastapi-backend-plan \
                          acrLoginServer=todoappreg.azurecr.io \
                          dockerImageName=todoappreg.azurecr.io/fastapi-backend:latest \
