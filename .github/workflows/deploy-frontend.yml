@@ -37,7 +37,7 @@ jobs:
         run: |
           az deployment group create \
             --resource-group todo-app \
-            --template-file infrastructure/azure-resource-manager/azure-deploy.json \
+            --template-file infrastructure/azure-resource-manager/azure-deploy-frontend.json \
             --parameters webAppName=react-frontend-app-2 \
                          serverFarmName=react-frontend-plan \
                          acrLoginServer=todoappreg.azurecr.io \
