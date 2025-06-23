@@ -1,0 +1,60 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "West Europe"
+    },
+    "webAppName": {
+      "type": "string",
+      "defaultValue": "react-frontend-app"
+    },
+    "serverFarmName": {
+      "type": "string",
+      "defaultValue": "react-frontend-plan"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('serverFarmName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "P1v2",
+        "tier": "PremiumV2",
+        "capacity": 1
+      },
+      "properties": {
+        "reserved": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('webAppName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('serverFarmName'))]"
+      ],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverFarmName'))]",
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "WEBSITES_PORT",
+              "value": "80"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_URL",
+              "value": "https://todoappreg.azurecr.io"
+            }
+          ],
+          "linuxFxVersion": "DOCKER|todoappreg.azurecr.io/react-frontend:latest"
+        },
+        "httpsOnly": true
+      }
+    }
+  ]
+}
