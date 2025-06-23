@@ -31,5 +31,5 @@ jobs:
 
       - name: Build and Push Docker Image React (frontend)
         run: |
-          docker build -t todoappreg.azurecr.io/react-frontend:latest ./backend
+          docker build -t todoappreg.azurecr.io/react-frontend:latest ./frontend/todo
           docker push todoappreg.azurecr.io/react-frontend:latest
