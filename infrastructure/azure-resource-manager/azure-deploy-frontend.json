@@ -35,6 +35,9 @@
       "apiVersion": "2022-03-01",
       "name": "[parameters('webAppName')]",
       "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', parameters('serverFarmName'))]"
       ],
