@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image FastAPI
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
       - name: Login to ACR via Azure CLI
         run: az acr login --name todoappreg
 
-      - name: Build and Push Docker Image (backend)
+      - name: Build and Push Docker Image FastAPI (backend)
         run: |
           docker build -t todoappreg.azurecr.io/fastapi-backend:latest ./backend
           docker push todoappreg.azurecr.io/fastapi-backend:latest
