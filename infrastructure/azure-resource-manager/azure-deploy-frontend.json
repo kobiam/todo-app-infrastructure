@@ -13,6 +13,12 @@
     "serverFarmName": {
       "type": "string",
       "defaultValue": "react-frontend-plan"
+    },
+    "acrLoginServer": {
+      "type": "string"
+    },
+    "dockerImageName": {
+      "type": "string"
     }
   },
   "resources": [
@@ -51,10 +57,10 @@
             },
             {
               "name": "DOCKER_REGISTRY_SERVER_URL",
-              "value": "https://todoappreg.azurecr.io"
+              "value": "[parameters('acrLoginServer')]"
             }
           ],
-          "linuxFxVersion": "DOCKER|todoappreg.azurecr.io/react-frontend:latest"
+          "linuxFxVersion": "[format('DOCKER|{0}', parameters('dockerImageName'))]"
         },
         "httpsOnly": true
       }
