@@ -1,11 +1,12 @@
 name: React Build and Push Docker Image
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'frontend/todo/**'
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'frontend/todo/**'
 
 permissions:
   id-token: write
