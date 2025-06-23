@@ -51,13 +51,15 @@
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverFarmName'))]",
         "siteConfig": {
-          "appCommandLine": "",
-          "linuxFxVersion": "[concat('DOCKER|', parameters('dockerImageName'))]",
-          "containerRegistryManagedIdentityClientId": "",
-          "acrUseManagedIdentityCreds": false,
-          "registryUsername": "[parameters('acrUsername')]",
-          "registryPassword": "[parameters('acrPassword')]"
-        }
+          "appSettings": [
+            {
+              "name": "WEBSITES_PORT",
+              "value": "3000"
+            }
+          ],
+          "linuxFxVersion": "DOCKER|todoappreg.azurecr.io/fastapi-backend:latest"
+        },
+        "httpsOnly": true
       }
     }
   ]
