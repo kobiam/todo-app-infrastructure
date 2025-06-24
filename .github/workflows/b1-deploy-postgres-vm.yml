@@ -2,11 +2,11 @@ name: B1 - Deploy PostgreSQL VM
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "main" ]
-    paths:
-      - 'infrastructure/azure-resource-manager/virtual-machines/deploy-postgres-vm.json'
-      - '.github/workflows/deploy-linux-vm.yml'
+  # push:
+  #   branches: [ "main" ]
+  #   paths:
+  #     - 'infrastructure/azure-resource-manager/virtual-machines/deploy-postgres-vm.json'
+  #     - '.github/workflows/deploy-linux-vm.yml'
 
 jobs:
   deploy:
