@@ -32,7 +32,14 @@ jobs:
       - name: Save DNS Zone ID
         id: save-dns
         run: |
+          DEPLOYMENT_NAME="virtual-network-deploy-$(date +%s)"
+          az deployment group create \
+            --resource-group todo-app \
+            --name $DEPLOYMENT_NAME \
+            --template-file infrastructure/azure-resource-manager/virtual-network-deploy-arm-template.json \
+            --parameters privateDnsZoneName=${{ secrets.POSTGRES_PRIVATE_DNS_NAME }}
+          
           echo "PRIVATE_DNS_ZONE_ID=$(az deployment group show \
             --resource-group todo-app \
-            --name azure-database-postgresql-deploy-arm-template \
+            --name $DEPLOYMENT_NAME \
             --query properties.outputs.privateDnsZoneId.value -o tsv)" >> $GITHUB_ENV
