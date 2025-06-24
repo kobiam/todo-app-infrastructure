@@ -56,8 +56,8 @@
       "name": "[parameters('serverName')]",
       "location": "[parameters('location')]",
       "sku": {
-        "name": "Standard_D4ds_v5",
-        "tier": "GeneralPurpose"
+        "name": "Standard_B2s",
+        "tier": "Burstable"
       },
       "properties": {
         "version": "[parameters('postgresVersion')]",
