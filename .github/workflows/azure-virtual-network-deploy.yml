@@ -1,4 +1,4 @@
-name: 1 - Virtual network deploy ARM template
+name: Virtual Network Deployment
 
 on:
   workflow_dispatch:
@@ -11,6 +11,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,26 +21,24 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy ARM Template
+      - name: Create Resource Group
+        run: |
+          az group create \
+            --name todo-app \
+            --location westeurope \
+            --tags project=todo-app
+
+      - name: Deploy Virtual Network
+        id: vnet-deploy
         uses: azure/arm-deploy@v2
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: 'todo-app'
           template: infrastructure/azure-resource-manager/virtual-network-deploy-arm-template.json
           parameters: >
+            location=westeurope
             privateDnsZoneName=${{ secrets.POSTGRES_PRIVATE_DNS_NAME }}
 
       - name: Save DNS Zone ID
-        id: save-dns
         run: |
-          DEPLOYMENT_NAME="virtual-network-deploy-$(date +%s)"
-          az deployment group create \
-            --resource-group todo-app \
-            --name $DEPLOYMENT_NAME \
-            --template-file infrastructure/azure-resource-manager/virtual-network-deploy-arm-template.json \
-            --parameters privateDnsZoneName=${{ secrets.POSTGRES_PRIVATE_DNS_NAME }}
-          
-          echo "PRIVATE_DNS_ZONE_ID=$(az deployment group show \
-            --resource-group todo-app \
-            --name $DEPLOYMENT_NAME \
-            --query properties.outputs.privateDnsZoneId.value -o tsv)" >> $GITHUB_ENV
+          echo "PRIVATE_DNS_ZONE_ID=${{ steps.vnet-deploy.outputs.privateDnsZoneId }}" >> $GITHUB_ENV

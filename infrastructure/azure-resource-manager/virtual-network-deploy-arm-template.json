@@ -2,6 +2,13 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "westeurope",
+      "metadata": {
+        "description": "Location for all resources"
+      }
+    },
     "virtualNetworkName": {
       "type": "string",
       "defaultValue": "todo-VNet",
@@ -60,7 +67,7 @@
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2024-07-01",
       "name": "[parameters('virtualNetworkName')]",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('location')]",  // Explicit West Europe location
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
