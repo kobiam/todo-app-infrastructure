@@ -1,11 +1,12 @@
 name: Virtual networks deploy ARM template
 
 on:
-    push:
-        branches: [ "main" ]
-        paths:
-            - 'infrastructure/azure-resource-manager/virtual-network-deploy-arm-template.json'
-            - '.github/workflows/azure-virtual-networks-deploy.yml'
+    workflow_dispatch:
+    # push:
+    #     branches: [ "main" ]
+    #     paths:
+    #         - 'infrastructure/azure-resource-manager/virtual-network-deploy-arm-template.json'
+    #         - '.github/workflows/azure-virtual-networks-deploy.yml'
 
 jobs:
     deploy:
