@@ -1,4 +1,4 @@
-name: Virtual networks deploy ARM template
+name: 1 - Virtual networks deploy ARM template
 
 on:
   workflow_dispatch:
