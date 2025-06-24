@@ -11,7 +11,7 @@
     },
     "virtualNetworkName": {
       "type": "string",
-      "defaultValue": "todo-todo-vnet",
+      "defaultValue": "todo-vnet",
       "metadata": {
         "description": "Name for the virtual network"
       }
