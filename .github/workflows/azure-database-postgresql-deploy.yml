@@ -27,5 +27,6 @@ jobs:
           resourceGroupName: 'todo-app'
           template: infrastructure/azure-resource-manager/azure-database-postgresql-deploy-arm-template.json
           parameters: >
+            location=westeurope
             administratorLoginPassword=${{ secrets.POSTGRES_ADMIN_PASSWORD }}
             privateDnsZoneId=${{ secrets.POSTGRES_PRIVATE_DNS_ID }}
