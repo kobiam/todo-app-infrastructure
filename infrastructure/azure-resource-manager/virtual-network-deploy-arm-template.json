@@ -53,7 +53,7 @@
     },
     "privateDnsZoneName": {
       "type": "string",
-      "defaultValue": "private.postgres.database.azure.com",
+      "defaultValue": "todo.postgres.database.azure.com",
       "metadata": {
         "description": "Name of the private DNS zone for PostgreSQL"
       }
