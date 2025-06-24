@@ -2,11 +2,11 @@ name: PostgreSQL Flexible Server Deploy
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "main" ]
-    paths:
-      - 'infrastructure/azure-resource-manager/azure-database-postgresql-deploy-arm-template.json'
-      - '.github/workflows/deploy_postgres.yml'
+  # push:
+  #   branches: [ "main" ]
+  #   paths:
+  #     - 'infrastructure/azure-resource-manager/azure-database-postgresql-deploy-arm-template.json'
+  #     - '.github/workflows/deploy_postgres.yml'
 
 jobs:
   deploy:
