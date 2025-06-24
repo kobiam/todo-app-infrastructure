@@ -30,6 +30,7 @@ jobs:
           parameters: >
             rgName=todo-app
             rgLocation=westeurope
+          region: westeurope  # REQUIRED FOR SUBSCRIPTION DEPLOYMENTS
 
       - name: Verify Resource Group
         run: |
