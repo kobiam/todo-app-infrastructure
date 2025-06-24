@@ -25,10 +25,11 @@ jobs:
         id: ssh-key
         run: |
           ssh-keygen -t rsa -b 4096 -f key -N ""
-          echo "SSH_PUBLIC_KEY=$(cat key.pub)" >> $GITHUB_ENV
-          echo "SSH_PRIVATE_KEY=$(cat key)" >> $GITHUB_ENV
+          # Encode keys to base64 to preserve formatting
+          echo "PRIVATE_KEY_BASE64=$(base64 -w0 key)" >> $GITHUB_ENV
+          echo "PUBLIC_KEY=$(cat key.pub)" >> $GITHUB_ENV
 
-      - name: Deploy Linux VM
+      - name: Deploy Postgres VM
         id: vm-deploy
         uses: azure/arm-deploy@v2
         with:
@@ -39,18 +40,17 @@ jobs:
             vmName=todo-postgres-vm
             location=westeurope
             adminUsername=azureuser
-            sshPublicKey=${{ env.SSH_PUBLIC_KEY }}
+            sshPublicKey=${{ env.PUBLIC_KEY }}
 
       - name: Save connection info
         run: |
           echo "PUBLIC_IP=${{ steps.vm-deploy.outputs.publicIP }}" >> $GITHUB_ENV
-          echo "SSH_COMMAND=${{ steps.vm-deploy.outputs.sshCommand }}" >> $GITHUB_ENV
-          echo "SSH_PRIVATE_KEY<<EOF" >> $GITHUB_ENV
-          echo "${{ env.SSH_PRIVATE_KEY }}" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo "SSH_COMMAND=ssh -i key.pem azureuser@${{ steps.vm-deploy.outputs.publicIP }}" >> $GITHUB_ENV
 
       - name: Connect to VM
         run: |
-          echo "${{ env.SSH_PRIVATE_KEY }}" > key.pem
+          # Decode base64 private key
+          echo "${{ env.PRIVATE_KEY_BASE64 }}" | base64 -d > key.pem
           chmod 400 key.pem
-          ssh -i key.pem -o StrictHostKeyChecking=no ${{ env.SSH_COMMAND }} 'echo "Successfully connected to $(hostname)"'
+          ssh -i key.pem -o StrictHostKeyChecking=no azureuser@${{ env.PUBLIC_IP }} 'echo "Success!"'
+
