@@ -1,12 +1,12 @@
 name: PostgreSQL Flexible Server Deploy
 
 on:
-    workflow_dispatch:
-    # push:
-    #     branches: [ "main" ]
-    #     paths:
-    #     - 'azure-database-postgresql-deploy-arm-template.json'
-    #     - '.github/workflows/deploy_postgres.yml'
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'infrastructure/azure-resource-manager/azure-database-postgresql-deploy-arm-template.json'
+      - '.github/workflows/deploy_postgres.yml'
 
 jobs:
   deploy:
@@ -28,3 +28,4 @@ jobs:
           template: infrastructure/azure-resource-manager/azure-database-postgresql-deploy-arm-template.json
           parameters: >
             administratorLoginPassword=${{ secrets.POSTGRES_ADMIN_PASSWORD }}
+            privateDnsZoneId=${{ secrets.POSTGRES_PRIVATE_DNS_ID }}

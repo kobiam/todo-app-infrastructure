@@ -36,6 +36,12 @@
       "metadata": {
         "description": "Location for all resources"
       }
+    },
+    "privateDnsZoneId": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource ID of the private DNS zone (must end with .postgres.database.azure.com)"
+      }
     }
   },
   "variables": {
@@ -59,7 +65,7 @@
         "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
         "network": {
           "delegatedSubnetResourceId": "[variables('subnetId')]",
-          "privateDnsZoneArmResourceId": ""
+          "privateDnsZoneArmResourceId": "[parameters('privateDnsZoneId')]"
         },
         "storage": {
           "storageSizeGB": 32,
