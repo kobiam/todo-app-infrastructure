@@ -1,77 +1,115 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "virtualNetworkName": {
-        "type": "string",
-        "defaultValue": "todo-VNet",
-        "metadata": {
-            "description": "Name for the virtual network"
-        }
-        },
-        "vnetAddressPrefix": {
-        "type": "string",
-        "defaultValue": "10.0.0.0/16",
-        "metadata": {
-            "description": "Address space for the virtual network"
-        }
-        },
-        "subnet1Name": {
-        "type": "string",
-        "defaultValue": "Subnet1",
-        "metadata": {
-            "description": "Name for the first subnet"
-        }
-        },
-        "subnet1Prefix": {
-        "type": "string",
-        "defaultValue": "10.0.1.0/24",
-        "metadata": {
-            "description": "Address prefix for the first subnet"
-        }
-        },
-        "subnet2Name": {
-        "type": "string",
-        "defaultValue": "Subnet2",
-        "metadata": {
-            "description": "Name for the second subnet"
-        }
-        },
-        "subnet2Prefix": {
-        "type": "string",
-        "defaultValue": "10.0.2.0/24",
-        "metadata": {
-            "description": "Address prefix for the second subnet"
-        }
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "todo-VNet",
+      "metadata": {
+        "description": "Name for the virtual network"
+      }
     },
-    "resources": [
-        {
-        "type": "Microsoft.Network/virtualNetworks",
-        "apiVersion": "2024-07-01",
-        "name": "[parameters('virtualNetworkName')]",
-        "location": "[resourceGroup().location]",
-        "properties": {
-            "addressSpace": {
-            "addressPrefixes": [
-                "[parameters('vnetAddressPrefix')]"
-            ]
-            },
-            "subnets": [
-            {
-                "name": "[parameters('subnet1Name')]",
-                "properties": {
-                "addressPrefix": "[parameters('subnet1Prefix')]"
-                }
-            },
-            {
-                "name": "[parameters('subnet2Name')]",
-                "properties": {
-                "addressPrefix": "[parameters('subnet2Prefix')]"
-                }
+    "vnetAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/16",
+      "metadata": {
+        "description": "Address space for the virtual network"
+      }
+    },
+    "subnet1Name": {
+      "type": "string",
+      "defaultValue": "Subnet1",
+      "metadata": {
+        "description": "Name for the first subnet"
+      }
+    },
+    "subnet1Prefix": {
+      "type": "string",
+      "defaultValue": "10.0.1.0/24",
+      "metadata": {
+        "description": "Address prefix for the first subnet"
+      }
+    },
+    "subnet2Name": {
+      "type": "string",
+      "defaultValue": "Subnet2",
+      "metadata": {
+        "description": "Name for the second subnet"
+      }
+    },
+    "subnet2Prefix": {
+      "type": "string",
+      "defaultValue": "10.0.2.0/24",
+      "metadata": {
+        "description": "Address prefix for the second subnet"
+      }
+    },
+    "privateDnsZoneName": {
+      "type": "string",
+      "defaultValue": "private.postgres.database.azure.com",
+      "metadata": {
+        "description": "Name of the private DNS zone for PostgreSQL"
+      }
+    }
+  },
+  "variables": {
+    "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2024-07-01",
+      "name": "[parameters('virtualNetworkName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('vnetAddressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('subnet1Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnet1Prefix')]"
             }
-            ]
-        }
-        }
-    ]
+          },
+          {
+            "name": "[parameters('subnet2Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnet2Prefix')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/privateDnsZones",
+      "apiVersion": "2020-06-01",
+      "name": "[parameters('privateDnsZoneName')]",
+      "location": "global"
+    },
+    {
+      "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+      "apiVersion": "2020-06-01",
+      "name": "[concat(parameters('privateDnsZoneName'), '/', 'todo-app-link')]",
+      "location": "global",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "[resourceId('Microsoft.Network/privateDnsZones', parameters('privateDnsZoneName'))]"
+      ],
+      "properties": {
+        "virtualNetwork": {
+          "id": "[variables('vnetId')]"
+        },
+        "registrationEnabled": false
+      }
+    }
+  ],
+  "outputs": {
+    "privateDnsZoneId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/privateDnsZones', parameters('privateDnsZoneName'))]"
+    }
+  }
 }

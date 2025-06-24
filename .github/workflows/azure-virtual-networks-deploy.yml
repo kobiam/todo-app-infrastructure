@@ -1,28 +1,38 @@
 name: Virtual networks deploy ARM template
 
 on:
-    workflow_dispatch:
-    # push:
-    #     branches: [ "main" ]
-    #     paths:
-    #         - 'infrastructure/azure-resource-manager/virtual-network-deploy-arm-template.json'
-    #         - '.github/workflows/azure-virtual-networks-deploy.yml'
+  workflow_dispatch:
+  # push:
+  #   branches: [ "main" ]
+  #   paths:
+  #     - 'infrastructure/azure-resource-manager/virtual-network-deploy-arm-template.json'
+  #     - '.github/workflows/azure-virtual-networks-deploy.yml'
 
 jobs:
-    deploy:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-            - name: Login to Azure
-              uses: azure/login@v2
-              with:
-                    creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-            - name: Deploy ARM Template
-              uses: azure/arm-deploy@v2
-              with:
-                subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-                resourceGroupName: 'todo-app'
-                template: infrastructure/azure-resource-manager/virtual-network-deploy-arm-template.json
+      - name: Deploy ARM Template
+        uses: azure/arm-deploy@v2
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: 'todo-app'
+          template: infrastructure/azure-resource-manager/virtual-network-deploy-arm-template.json
+          parameters: >
+            privateDnsZoneName=${{ secrets.POSTGRES_PRIVATE_DNS_NAME }}
+
+      - name: Save DNS Zone ID
+        id: save-dns
+        run: |
+          echo "PRIVATE_DNS_ZONE_ID=$(az deployment group show \
+            --resource-group todo-app \
+            --name azure-database-postgresql-deploy-arm-template \
+            --query properties.outputs.privateDnsZoneId.value -o tsv)" >> $GITHUB_ENV
