@@ -30,7 +30,7 @@ jobs:
       - name: Login to ACR via Azure CLI
         run: az acr login --name todoappreg
 
-      - name: Build and Push Docker Image React (frontend)
+      - name: React Build and Push Docker Image (frontend)
         run: |
           docker build -t todoappreg.azurecr.io/react-frontend:latest ./frontend/todo
           docker push todoappreg.azurecr.io/react-frontend:latest

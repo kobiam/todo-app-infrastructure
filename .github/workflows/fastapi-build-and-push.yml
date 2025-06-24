@@ -1,11 +1,12 @@
-name: Build and Push Docker Image FastAPI
+name: FastAPI Build and Push Docker Image
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'backend/**'
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'backend/**'
 
 permissions:
   id-token: write
@@ -29,7 +30,7 @@ jobs:
       - name: Login to ACR via Azure CLI
         run: az acr login --name todoappreg
 
-      - name: Build and Push Docker Image FastAPI (backend)
+      - name: FastAPI Build and Push Docker Image (backend)
         run: |
           docker build -t todoappreg.azurecr.io/fastapi-backend:latest ./backend
           docker push todoappreg.azurecr.io/fastapi-backend:latest
