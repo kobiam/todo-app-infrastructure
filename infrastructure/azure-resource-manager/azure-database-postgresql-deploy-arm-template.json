@@ -56,7 +56,7 @@
       "name": "[parameters('serverName')]",
       "location": "[parameters('location')]",
       "sku": {
-        "name": "GP_Standard_D2s_v3", // General Purpose SKU
+        "name": "Standard_D2s_v3", // General Purpose SKU
         "tier": "GeneralPurpose"
       },
       "properties": {
