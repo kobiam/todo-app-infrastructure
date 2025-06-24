@@ -16,7 +16,7 @@
       }
     },
     "sshPublicKey": {
-      "type": "string",
+      "type": "securestring",
       "metadata": {
         "description": "SSH public key"
       }
