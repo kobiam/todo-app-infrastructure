@@ -5,7 +5,7 @@ on:
   # push:
   #   branches: [ "main" ]
   #   paths:
-  #     - 'infrastructure/azure-resource-manager/resource-group-deploy.json'
+  #     - 'infrastructure/azure-resource-manager/azure-resource-group-deploy.json'
   #     - '.github/workflows/deploy-resource-group.yml'
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
         with:
           scope: subscription
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-          template: infrastructure/azure-resource-manager/resource-group-deploy.json
+          template: infrastructure/azure-resource-manager/azure-resource-group-deploy.json
           parameters: >
             rgName=todo-app
             rgLocation=westeurope
