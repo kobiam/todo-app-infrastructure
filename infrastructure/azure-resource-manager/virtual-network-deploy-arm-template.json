@@ -11,12 +11,12 @@
     },
     "virtualNetworkName": {
       "type": "string",
-      "defaultValue": "todo-VNet",
+      "defaultValue": "todo-todo-vnet",
       "metadata": {
         "description": "Name for the virtual network"
       }
     },
-    "vnetAddressPrefix": {
+    "todo-vnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.0.0.0/16",
       "metadata": {
@@ -60,7 +60,7 @@
     }
   },
   "variables": {
-    "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+    "todo-vnetId": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
   },
   "resources": [
     {
@@ -71,7 +71,7 @@
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
-            "[parameters('vnetAddressPrefix')]"
+            "[parameters('todo-vnetAddressPrefix')]"
           ]
         },
         "subnets": [
@@ -115,7 +115,7 @@
       ],
       "properties": {
         "virtualNetwork": {
-          "id": "[variables('vnetId')]"
+          "id": "[variables('todo-vnetId')]"
         },
         "registrationEnabled": false
       }

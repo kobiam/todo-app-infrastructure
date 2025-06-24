@@ -29,7 +29,7 @@ jobs:
             --tags project=todo-app
 
       - name: Deploy Virtual Network
-        id: vnet-deploy
+        id: todo-vnet-deploy
         uses: azure/arm-deploy@v2
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
@@ -41,4 +41,4 @@ jobs:
 
       - name: Save DNS Zone ID
         run: |
-          echo "PRIVATE_DNS_ZONE_ID=${{ steps.vnet-deploy.outputs.privateDnsZoneId }}" >> $GITHUB_ENV
+          echo "PRIVATE_DNS_ZONE_ID=${{ steps.todo-vnet-deploy.outputs.privateDnsZoneId }}" >> $GITHUB_ENV
