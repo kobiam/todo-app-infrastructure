@@ -20,9 +20,20 @@ jobs:
         id: ssh-key
         run: |
           ssh-keygen -t rsa -b 4096 -f key -N ""
-          # Format public key for ARM template
-          echo "PUBLIC_KEY=\"$(cat key.pub)\"" >> $GITHUB_ENV
+          # Format public key for JSON compatibility
+          echo "PUBLIC_KEY='\"$(cat key.pub)\"'" >> $GITHUB_ENV
           echo "PRIVATE_KEY_BASE64=$(base64 -w0 key)" >> $GITHUB_ENV
+
+      - name: Create parameters file
+        run: |
+          cat <<EOF > parameters.json
+          {
+            "vmName": { "value": "todo-postgres-vm" },
+            "location": { "value": "westeurope" },
+            "adminUsername": { "value": "azureuser" },
+            "sshPublicKey": { "value": ${{ env.PUBLIC_KEY }} }
+          }
+          EOF
 
       - name: Deploy Postgres VM
         id: vm-deploy
@@ -31,13 +42,7 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: 'todo-app'
           template: infrastructure/azure-resource-manager/virtual-machines/deploy-postgres-vm.json
-          parameters: |
-            {
-              "vmName": { "value": "todo-postgres-vm" },
-              "location": { "value": "westeurope" },
-              "adminUsername": { "value": "azureuser" },
-              "sshPublicKey": { "value": "${{ env.PUBLIC_KEY }}" }
-            }
+          parameters: parameters.json
 
       - name: Save connection info
         run: |
