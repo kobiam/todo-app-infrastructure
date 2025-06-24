@@ -1,4 +1,4 @@
-name: 1 - Create Resource Group
+name: A1 - Create Resource Group
 
 on:
   workflow_dispatch:

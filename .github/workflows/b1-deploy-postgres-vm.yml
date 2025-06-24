@@ -1,0 +1,56 @@
+name: B1 - Deploy PostgreSQL VM
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'infrastructure/azure-resource-manager/virtual-machines/deploy-postgres-vm.json'
+      - '.github/workflows/deploy-linux-vm.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Generate SSH Key
+        id: ssh-key
+        run: |
+          ssh-keygen -t rsa -b 4096 -f key -N ""
+          echo "SSH_PUBLIC_KEY=$(cat key.pub)" >> $GITHUB_ENV
+          echo "SSH_PRIVATE_KEY=$(cat key)" >> $GITHUB_ENV
+
+      - name: Deploy Linux VM
+        id: vm-deploy
+        uses: azure/arm-deploy@v2
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: 'todo-app'
+          template: infrastructure/azure-resource-manager/virtual-machines/deploy-postgres-vm.json
+          parameters: >
+            vmName=todo-postgres-vm
+            location=westeurope
+            adminUsername=azureuser
+            sshPublicKey=${{ env.SSH_PUBLIC_KEY }}
+
+      - name: Save connection info
+        run: |
+          echo "PUBLIC_IP=${{ steps.vm-deploy.outputs.publicIP }}" >> $GITHUB_ENV
+          echo "SSH_COMMAND=${{ steps.vm-deploy.outputs.sshCommand }}" >> $GITHUB_ENV
+          echo "SSH_PRIVATE_KEY<<EOF" >> $GITHUB_ENV
+          echo "${{ env.SSH_PRIVATE_KEY }}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Connect to VM
+        run: |
+          echo "${{ env.SSH_PRIVATE_KEY }}" > key.pem
+          chmod 400 key.pem
+          ssh -i key.pem -o StrictHostKeyChecking=no ${{ env.SSH_COMMAND }} 'echo "Successfully connected to $(hostname)"'

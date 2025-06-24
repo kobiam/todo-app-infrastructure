@@ -1,4 +1,4 @@
-name: 4 - Azure Container Registry Deploy
+name: A4 - Azure Container Registry Deploy
 
 on:
   workflow_dispatch:
