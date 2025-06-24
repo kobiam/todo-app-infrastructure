@@ -2,11 +2,6 @@ name: B1 - Deploy PostgreSQL VM
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [ "main" ]
-  #   paths:
-  #     - 'infrastructure/azure-resource-manager/virtual-machines/deploy-postgres-vm.json'
-  #     - '.github/workflows/deploy-linux-vm.yml'
 
 jobs:
   deploy:
@@ -25,9 +20,9 @@ jobs:
         id: ssh-key
         run: |
           ssh-keygen -t rsa -b 4096 -f key -N ""
-          # Encode keys to base64 to preserve formatting
+          # Format public key for ARM template
+          echo "PUBLIC_KEY=\"$(cat key.pub)\"" >> $GITHUB_ENV
           echo "PRIVATE_KEY_BASE64=$(base64 -w0 key)" >> $GITHUB_ENV
-          echo "PUBLIC_KEY=$(cat key.pub)" >> $GITHUB_ENV
 
       - name: Deploy Postgres VM
         id: vm-deploy
@@ -36,11 +31,11 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: 'todo-app'
           template: infrastructure/azure-resource-manager/virtual-machines/deploy-postgres-vm.json
-          parameters: >
+          parameters: |
             vmName=todo-postgres-vm
             location=westeurope
             adminUsername=azureuser
-            sshPublicKey=${{ env.PUBLIC_KEY }}
+            sshPublicKey='${{ env.PUBLIC_KEY }}'
 
       - name: Save connection info
         run: |
@@ -49,8 +44,6 @@ jobs:
 
       - name: Connect to VM
         run: |
-          # Decode base64 private key
           echo "${{ env.PRIVATE_KEY_BASE64 }}" | base64 -d > key.pem
           chmod 400 key.pem
           ssh -i key.pem -o StrictHostKeyChecking=no azureuser@${{ env.PUBLIC_IP }} 'echo "Success!"'
-
