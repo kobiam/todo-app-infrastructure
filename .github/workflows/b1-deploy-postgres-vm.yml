@@ -32,10 +32,12 @@ jobs:
           resourceGroupName: 'todo-app'
           template: infrastructure/azure-resource-manager/virtual-machines/deploy-postgres-vm.json
           parameters: |
-            vmName=todo-postgres-vm
-            location=westeurope
-            adminUsername=azureuser
-            sshPublicKey='${{ env.PUBLIC_KEY }}'
+            {
+              "vmName": { "value": "todo-postgres-vm" },
+              "location": { "value": "westeurope" },
+              "adminUsername": { "value": "azureuser" },
+              "sshPublicKey": { "value": "${{ env.PUBLIC_KEY }}" }
+            }
 
       - name: Save connection info
         run: |
