@@ -1,4 +1,4 @@
-name: 2 - PostgreSQL Flexible Server Deploy
+name: 3 - PostgreSQL Flexible Server Deploy
 
 on:
   workflow_dispatch:

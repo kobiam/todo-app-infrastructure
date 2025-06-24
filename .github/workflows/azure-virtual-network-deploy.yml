@@ -1,4 +1,4 @@
-name: 1 - Virtual Network Deployment
+name: 2 - Virtual Network Deployment
 
 on:
   workflow_dispatch:
