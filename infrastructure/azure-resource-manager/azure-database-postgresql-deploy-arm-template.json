@@ -77,7 +77,8 @@
         },
         "highAvailability": {
           "mode": "Disabled"
-        }
+        },
+        "availabilityZone": "2"
       }
     }
   ]
