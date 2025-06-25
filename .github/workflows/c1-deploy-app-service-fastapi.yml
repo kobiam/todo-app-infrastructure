@@ -6,25 +6,25 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Deploy ARM template
-      uses: azure/arm-deploy@v1
-      with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: todo-app
-        template: infrastructure/azure-resource-manager/app-service/deploy-app-service-fastapi.json
-        parameters: >
-          appName=fastapi-backend
-          acrServer=todoappreg.azurecr.io
-          acrImage=fastapi-backend:latest
-        failOnStdErr: false
-        debug: true
+      - name: Deploy to Container Apps via ARM
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          resourceGroupName: todo-app
+          template: infrastructure/azure-resource-manager/app-service/deploy-app-service-fastapi.json
+          parameters: >
+            containerAppName=fastapi-backend
+            acrServer=todoappreg.azurecr.io
+            acrImage=fastapi-backend:latest
+            acrUsername=${{ secrets.ACR_USERNAME }}
+            acrPassword=${{ secrets.ACR_PASSWORD }}
+          deploymentName: deploy-fastapi-${{ github.run_id }}
