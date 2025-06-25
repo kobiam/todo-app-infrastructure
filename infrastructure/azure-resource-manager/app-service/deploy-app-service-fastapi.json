@@ -2,12 +2,12 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "appName": { "type": "string", "defaultValue": "fastapi-backend" },
+    "appName": { "type": "string" },
     "location": { "type": "string", "defaultValue": "eastus" },
-    "acrServer": { "type": "string", "defaultValue": "todoappreg.azurecr.io" },
-    "acrImage": { "type": "string", "defaultValue": "fastapi-backend:latest" },
-    "vnetName": { "type": "string", "defaultValue": "todo-vnet" },
-    "subnetName": { "type": "string", "defaultValue": "Subnet1" }
+    "acrServer": { "type": "string" },
+    "acrImage": { "type": "string" },
+    "vnetName": { "type": "string" },
+    "subnetName": { "type": "string" }
   },
   "resources": [
     {
@@ -15,7 +15,10 @@
       "apiVersion": "2022-03-01",
       "name": "[concat(parameters('appName'), '-plan')]",
       "location": "[parameters('location')]",
-      "sku": { "name": "P1v2", "tier": "PremiumV2" },
+      "sku": {
+        "name": "P1v2",
+        "tier": "PremiumV2"
+      },
       "properties": {
         "reserved": true
       }
@@ -25,33 +28,20 @@
       "apiVersion": "2022-03-01",
       "name": "[parameters('appName')]",
       "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
       "dependsOn": [
-        "[concat('Microsoft.Web/serverfarms/', parameters('appName'), '-plan')]"
+        "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appName'), '-plan'))]"
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appName'), '-plan'))]",
         "siteConfig": {
           "linuxFxVersion": "[concat('DOCKER|', parameters('acrServer'), '/', parameters('acrImage'))]",
           "appSettings": [
-            { "name": "WEBSITES_PORT", "value": "3000" },
-            { "name": "DOCKER_REGISTRY_SERVER_URL", "value": "[concat('https://', parameters('acrServer'))]" },
-            { "name": "DOCKER_REGISTRY_SERVER_USERNAME", "value": "<ACR-USERNAME>" },
-            { "name": "DOCKER_REGISTRY_SERVER_PASSWORD", "value": "<ACR-PASSWORD>" }
+            { "name": "WEBSITES_PORT", "value": "3000" }
           ]
         }
-      }
-    },
-    {
-      "type": "Microsoft.Web/sites/virtualNetworkConnections",
-      "apiVersion": "2022-03-01",
-      "name": "[format('{0}/vnet', parameters('appName'))]",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', parameters('appName'))]"
-      ],
-      "properties": {
-        "vnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
-        "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
       }
     }
   ]
