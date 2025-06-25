@@ -6,9 +6,19 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Download Image Tag from Build
+        uses: actions/download-artifact@v4
+        with:
+          name: react-image-tag
+
+      - name: Read tag from file
+        id: read_tag
+        run: echo "TAG=$(cat image-tag.txt)" >> $GITHUB_ENV
 
       - name: Azure Login
         uses: azure/login@v1
@@ -24,7 +34,7 @@ jobs:
           parameters: >
             containerAppName=react-frontend
             acrServer=todoappreg.azurecr.io
-            acrImage=react-frontend:latest
+            acrImage=react-frontend:${{ env.TAG }}
             acrUsername=${{ secrets.ACR_USERNAME }}
             acrPassword=${{ secrets.ACR_PASSWORD }}
           deploymentName: deploy-react-${{ github.run_id }}
