@@ -1,18 +1,11 @@
 name: C2 - Deploy React App to Azure App Service
 
 on:
-  workflow_call:
-    inputs:
-      imageTag:
-        required: true
-        type: string
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_TAG: ${{ inputs.imageTag }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -31,7 +24,7 @@ jobs:
           parameters: >
             containerAppName=react-frontend
             acrServer=todoappreg.azurecr.io
-            acrImage=react-frontend:${{ env.IMAGE_TAG }}
+            acrImage=react-frontend:6
             acrUsername=${{ secrets.ACR_USERNAME }}
             acrPassword=${{ secrets.ACR_PASSWORD }}
           deploymentName: deploy-react-${{ github.run_id }}
