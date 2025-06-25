@@ -1,4 +1,4 @@
-name: React Build and Push Docker Image
+name: B2 - React Build and Push Docker Image
 
 on:
   workflow_dispatch:

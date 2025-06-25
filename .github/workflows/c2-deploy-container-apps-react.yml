@@ -28,4 +28,3 @@ jobs:
             acrUsername=${{ secrets.ACR_USERNAME }}
             acrPassword=${{ secrets.ACR_PASSWORD }}
           deploymentName: deploy-react-${{ github.run_id }}
-

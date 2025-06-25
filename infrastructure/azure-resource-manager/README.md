@@ -12,6 +12,7 @@ az network private-dns zone show \
 enable admin user of ACR
 
 ```bash
+az acr credential show --name todoappreg --query "username" --output tsv
 az acr update --name todoappreg --admin-enabled true
 ```
 

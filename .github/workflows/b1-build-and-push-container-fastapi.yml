@@ -1,4 +1,4 @@
-name: FastAPI Build and Push Docker Image
+name: B1 - FastAPI Build and Push Docker Image
 
 on:
   workflow_dispatch:
