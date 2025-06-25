@@ -2,11 +2,6 @@ name: B1 - FastAPI Build and Push Docker Image
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - 'backend/**'
 
 permissions:
   id-token: write
@@ -15,6 +10,8 @@ permissions:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${{ github.run_number }}
 
     steps:
       - name: Checkout code
@@ -34,3 +31,12 @@ jobs:
         run: |
           docker build -t todoappreg.azurecr.io/fastapi-backend:latest ./backend
           docker push todoappreg.azurecr.io/fastapi-backend:latest
+          docker push todoappreg.azurecr.io/fastapi-backend:${IMAGE_TAG}
+      - name: Upload Image Tag Artifact
+        run: echo "${IMAGE_TAG}" > image-tag.txt
+
+      - name: Save image tag for next workflow
+        uses: actions/upload-artifact@v4
+        with:
+          name: fastapi-image-tag
+          path: image-tag.txt
