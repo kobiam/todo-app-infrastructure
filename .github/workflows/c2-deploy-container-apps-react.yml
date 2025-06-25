@@ -21,7 +21,7 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: todo-app
           template: infrastructure/azure-resource-manager/container-apps/deploy-container-apps-react.json
-          parameters: |
+          parameters: >
             containerAppName=react-frontend
             acrServer=todoappreg.azurecr.io
             acrImage=react-frontend:latest
