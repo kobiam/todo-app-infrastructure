@@ -27,3 +27,4 @@ jobs:
           acrServer=todoappreg.azurecr.io
           acrImage=fastapi-backend:latest
         failOnStdErr: false
+        debug: true
