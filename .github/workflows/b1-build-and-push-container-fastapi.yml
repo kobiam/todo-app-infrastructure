@@ -29,9 +29,10 @@ jobs:
 
       - name: FastAPI Build and Push Docker Image (backend)
         run: |
-          docker build -t todoappreg.azurecr.io/fastapi-backend:latest ./backend
+          docker build -t todoappreg.azurecr.io/fastapi-backend:latest -t todoappreg.azurecr.io/fastapi-backend:${IMAGE_TAG} ./backend
           docker push todoappreg.azurecr.io/fastapi-backend:latest
           docker push todoappreg.azurecr.io/fastapi-backend:${IMAGE_TAG}
+
       - name: Upload Image Tag Artifact
         run: echo "${IMAGE_TAG}" > image-tag.txt
 
