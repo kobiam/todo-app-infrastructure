@@ -1,0 +1,77 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "containerAppName": { "type": "string" },
+    "location": { "type": "string", "defaultValue": "westeurope" },
+    "acrServer": { "type": "string" },
+    "acrImage": { "type": "string" },
+    "acrUsername": { "type": "string" },
+    "acrPassword": { "type": "securestring" }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.App/managedEnvironments",
+      "apiVersion": "2023-05-01",
+      "name": "aca-env",
+      "location": "[parameters('location')]",
+      "properties": {
+        "appLogsConfiguration": {
+          "destination": "log-analytics",
+          "logAnalyticsConfiguration": {
+            "customerId": "00000000-0000-0000-0000-000000000000",
+            "sharedKey": "fake"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2023-05-01",
+      "name": "[parameters('containerAppName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "Microsoft.App/managedEnvironments/aca-env"
+      ],
+      "properties": {
+        "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments', 'aca-env')]",
+        "configuration": {
+          "ingress": {
+            "external": true,
+            "targetPort": 5432,
+            "transport": "auto"
+          },
+          "registries": [
+            {
+              "server": "[parameters('acrServer')]",
+              "username": "[parameters('acrUsername')]",
+              "passwordSecretRef": "acr-pwd"
+            }
+          ],
+          "secrets": [
+            {
+              "name": "acr-pwd",
+              "value": "[parameters('acrPassword')]"
+            }
+          ]
+        },
+        "template": {
+          "containers": [
+            {
+              "name": "postgres",
+              "image": "[concat(parameters('acrServer'), '/', parameters('acrImage'))]",
+              "resources": {
+                "cpu": 0.5,
+                "memory": "1Gi"
+              }
+            }
+          ],
+          "scale": {
+            "minReplicas": 1,
+            "maxReplicas": 3
+          }
+        }
+      }
+    }
+  ]
+}
