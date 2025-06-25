@@ -40,13 +40,15 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const imageTag = '${{ env.IMAGE_TAG }}';
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'C2 - Deploy React App to Azure App Service.yml',
               ref: 'main',
               inputs: {
-                imageTag: process.env.IMAGE_TAG
+                imageTag: imageTag
               }
             });
+
 
