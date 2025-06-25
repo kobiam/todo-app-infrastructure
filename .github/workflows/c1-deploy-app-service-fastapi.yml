@@ -1,8 +1,7 @@
 name: C1 - Deploy FastAPI App to Azure App Service
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   deploy:
