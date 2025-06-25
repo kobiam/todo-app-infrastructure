@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "appName": { "type": "string" },
-    "location": { "type": "string", "defaultValue": "eastus" },
+    "location": { "type": "string", "defaultValue": "westeurope" },
     "acrServer": { "type": "string" },
     "acrImage": { "type": "string" },
     "vnetName": { "type": "string" },
@@ -40,7 +40,9 @@
           "linuxFxVersion": "[concat('DOCKER|', parameters('acrServer'), '/', parameters('acrImage'))]",
           "appSettings": [
             { "name": "WEBSITES_PORT", "value": "3000" }
-          ]
+          ],
+          "vnetRouteAllEnabled": true,
+          "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
         }
       }
     }
