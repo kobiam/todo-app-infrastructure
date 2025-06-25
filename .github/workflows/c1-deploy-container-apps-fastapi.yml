@@ -21,10 +21,11 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: todo-app
           template: infrastructure/azure-resource-manager/container-apps/deploy-app-service-fastapi.json
-          parameters: >
+          parameters: |
             containerAppName=fastapi-backend
             acrServer=todoappreg.azurecr.io
             acrImage=fastapi-backend:latest
             acrUsername=${{ secrets.ACR_USERNAME }}
             acrPassword=${{ secrets.ACR_PASSWORD }}
           deploymentName: deploy-fastapi-${{ github.run_id }}
+

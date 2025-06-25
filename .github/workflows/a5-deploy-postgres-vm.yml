@@ -1,4 +1,4 @@
-name: B1 - Deploy PostgreSQL VM
+name: A5 - Deploy PostgreSQL VM
 
 on:
   workflow_dispatch:
