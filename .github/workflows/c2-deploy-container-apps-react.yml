@@ -22,10 +22,10 @@ jobs:
           resourceGroupName: todo-app
           template: infrastructure/azure-resource-manager/container-apps/deploy-container-apps-react.json
           parameters: |
-            containerAppName=fastapi-backend
+            containerAppName=fastapi-frontend
             acrServer=todoappreg.azurecr.io
-            acrImage=fastapi-backend:latest
+            acrImage=react-frontend:latest
             acrUsername=${{ secrets.ACR_USERNAME }}
             acrPassword=${{ secrets.ACR_PASSWORD }}
-          deploymentName: deploy-fastapi-${{ github.run_id }}
+          deploymentName: deploy-react-${{ github.run_id }}
 
