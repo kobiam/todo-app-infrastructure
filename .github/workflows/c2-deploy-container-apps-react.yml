@@ -1,24 +1,21 @@
 name: C2 - Deploy React App to Azure App Service
 
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      imageTag:
+        required: true
+        type: string
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${{ inputs.imageTag }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Download Image Tag from Build
-        uses: actions/download-artifact@v4
-        with:
-          name: react-image-tag
-
-      - name: Read tag from file
-        id: read_tag
-        run: echo "TAG=$(cat image-tag.txt)" >> $GITHUB_ENV
 
       - name: Azure Login
         uses: azure/login@v1
@@ -34,7 +31,7 @@ jobs:
           parameters: >
             containerAppName=react-frontend
             acrServer=todoappreg.azurecr.io
-            acrImage=react-frontend:${{ env.TAG }}
+            acrImage=react-frontend:${{ env.IMAGE_TAG }}
             acrUsername=${{ secrets.ACR_USERNAME }}
             acrPassword=${{ secrets.ACR_PASSWORD }}
           deploymentName: deploy-react-${{ github.run_id }}

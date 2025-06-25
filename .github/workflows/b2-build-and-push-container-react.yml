@@ -36,8 +36,17 @@ jobs:
       - name: Upload Image Tag Artifact
         run: echo "${IMAGE_TAG}" > image-tag.txt
 
-      - name: Save image tag for next workflow
-        uses: actions/upload-artifact@v4
+      - name: Trigger Deploy Workflow
+        uses: actions/github-script@v7
         with:
-          name: react-image-tag
-          path: image-tag.txt
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'C2 - Deploy React App to Azure App Service.yml',
+              ref: 'main',
+              inputs: {
+                imageTag: process.env.IMAGE_TAG
+              }
+            });
+
