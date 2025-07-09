@@ -48,12 +48,18 @@ Please check the **Actions** tab
 2. Deploy virtual network
 3. Deploy container registry
 4. Get the registry password, and update the registry password in GitHub actions secrets
+  
+  ```bash
+  az acr credential show --name todoappreg --query "passwords[0].value" --output tsv
+  ```
+
 5. Build fastapi-backend
 6. Build react-fronend
 7. Deploy fastapi-backend
-8. Update the fastapi-backend baseurl in the `Todos.js` file of the react-frontend
-9. Deploy react-frontend
-10. Check the url of react-frontend
+8. Update the react-frontend `baseUrl` in the `Todos.js` file of the react-frontend
+9. Deploy react-frontend with the specific build number from GitHub actions
+10. Deploy fastapi-backend with the specific build number, and add to the `origins` in `main.py` the react-backend url
+11. Check the url of react-frontend
 
 ### Resources
 

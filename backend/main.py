@@ -10,7 +10,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "localhost:3000",
-    "https://react-frontend.wonderfulwave-ddf8041e.westeurope.azurecontainerapps.io"
+    "https://react-frontend.happydune-93322d2f.westeurope.azurecontainerapps.io"
 ]
 
 app.add_middleware(
