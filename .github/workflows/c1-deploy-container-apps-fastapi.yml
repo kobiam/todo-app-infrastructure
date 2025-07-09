@@ -24,7 +24,7 @@ jobs:
           parameters: >
             containerAppName=fastapi-backend
             acrServer=todoappreg.azurecr.io
-            acrImage=fastapi-backend:latest
+            acrImage=fastapi-backend:7
             acrUsername=${{ secrets.ACR_USERNAME }}
             acrPassword=${{ secrets.ACR_PASSWORD }}
           deploymentName: deploy-fastapi-${{ github.run_id }}
