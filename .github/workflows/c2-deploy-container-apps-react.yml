@@ -24,7 +24,7 @@ jobs:
           parameters: >
             containerAppName=react-frontend
             acrServer=todoappreg.azurecr.io
-            acrImage=react-frontend:latest
+            acrImage=react-frontend:15
             acrUsername=${{ secrets.ACR_USERNAME }}
             acrPassword=${{ secrets.ACR_PASSWORD }}
           deploymentName: deploy-react-${{ github.run_id }}
