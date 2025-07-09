@@ -19,7 +19,7 @@ export default function Todos() {
   const [error, setError] = useState(null);
   const [showStatus, setShowStatus] = useState(null);
 
-  const baseUrl = "https://fastapi-backend.wonderfulwave-ddf8041e.westeurope.azurecontainerapps.io";
+  const baseUrl = "https://fastapi-backend.happydune-93322d2f.westeurope.azurecontainerapps.io";
   function getTasks() {
     console.log("Get Task List")    
     axios({
