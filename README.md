@@ -42,6 +42,19 @@ Please check the **Actions** tab
 6. Deploy fastapi-backend
 7. Deploy react-frontend
 
+### App Deployment (step-by-step)
+
+1. Deploy resource group
+2. Deploy virtual network
+3. Deploy container registry
+4. Get the registry password, and update the registry password in GitHub actions secrets
+5. Build fastapi-backend
+6. Build react-fronend
+7. Deploy fastapi-backend
+8. Update the fastapi-backend baseurl in the `Todos.js` file of the react-frontend
+9. Deploy react-frontend
+10. Check the url of react-frontend
+
 ### Resources
 
 ![todo-app](pics/resource-manager.png)
